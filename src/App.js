@@ -1,24 +1,34 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState, useEffect } from 'react';
+
+import Formulario from './components/Formulario'
 
 function App() {
+
+  const [palabra, setPalabra] = useState('')
+  const [resultado, setResultado] = useState('')
+
+  useEffect(()=>{
+
+    const callApi = async () => {
+      if(palabra==='') return
+
+      const key = '17437436-2a77f10fce051f4ed66c30961'
+      const url = `https://pixabay.com/api/?key=${key}&q=yellow+flowers&image_type=photo`
+
+      const request = await fetch(url)
+      const result = await request.json()
+      setResultado(result.hits)
+    }
+    callApi()
+  }, [palabra])
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="container">
+      <div className='jumbotron'>
+        <p className='lead text-center'>Buscador Imagenes</p>
+        
+        <Formulario setPalabra={setPalabra}/>
+      </div>
     </div>
   );
 }
